@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Delete Staff{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-5">
+        <div class="card shadow border-danger">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;">
+                <h5 class="mb-0"><i class="fas fa-trash me-2"></i>Delete Staff Member</h5>
+            </div>
+            <div class="card-body p-4 text-center">
+                <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3 d-block"></i>
+                <p class="fw-bold fs-5">Are you sure you want to delete <strong>{{ staff.name }}</strong>?</p>
+                <p class="text-muted small">This will permanently delete the staff account and all associated data. This action cannot be undone.</p>
+                <form method="post" class="d-flex gap-2 justify-content-center mt-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="fas fa-trash me-2"></i>Yes, Delete
+                    </button>
+                    <a href="{% url 'staff_detail' staff.pk %}" class="btn btn-outline-secondary px-4">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

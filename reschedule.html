@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Reschedule Appointment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;">
+                <h5 class="mb-0"><i class="fas fa-calendar-edit me-2"></i>Reschedule Appointment</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-600">New Date</label>
+                        {{ form.appointment_date }}
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-600">Start Time</label>
+                            {{ form.start_time }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-600">End Time</label>
+                            {{ form.end_time }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">Reason</label>
+                        {{ form.reason }}
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning flex-fill text-white fw-600">
+                            <i class="fas fa-save me-2"></i>Reschedule
+                        </button>
+                        <a href="{% url 'appointment_detail' appointment.id %}" class="btn btn-outline-secondary flex-fill">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

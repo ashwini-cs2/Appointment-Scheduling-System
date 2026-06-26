@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}Manage Appointments{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4 align-items-center">
+    <div class="col">
+        <h4 class="fw-bold mb-0"><i class="fas fa-calendar-alt me-2 text-info"></i>Appointment Requests</h4>
+        <p class="text-muted mb-0 small">Review and respond to student booking requests</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-home me-1"></i>Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Pending Requests -->
+<div class="card mb-4 border-warning">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;">
+        <h6 class="mb-0"><i class="fas fa-exclamation-circle me-2"></i>Pending Requests
+            <span class="badge bg-white text-warning ms-2">{{ pending.count }}</span>
+        </h6>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr><th>Student</th><th>Email</th><th>Date</th><th>Time</th><th>Notes</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                {% for apt in pending %}
+                <tr>
+                    <td>
+                        <div class="fw-600">{{ apt.customer.get_full_name|default:apt.customer.username }}</div>
+                    </td>
+                    <td><small class="text-muted">{{ apt.customer.email }}</small></td>
+                    <td><strong>{{ apt.appointment_date }}</strong></td>
+                    <td>{{ apt.start_time }} – {{ apt.end_time }}</td>
+                    <td><small class="text-muted">{{ apt.notes|truncatechars:50|default:"No notes" }}</small></td>
+                    <td>
+                        <a href="{% url 'accept_appointment' apt.id %}"
+                           class="btn btn-success btn-sm me-1"
+                           onclick="return confirm('Confirm appointment with {{ apt.customer.username }}?')">
+                            <i class="fas fa-check me-1"></i>Accept
+                        </a>
+                        <a href="{% url 'reject_appointment' apt.id %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-times me-1"></i>Reject
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted py-4">
+                    <i class="fas fa-check-circle text-success fa-lg me-2"></i>No pending requests — all clear!
+                </td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmed Appointments -->
+<div class="card mb-4">
+    <div class="card-header" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;">
+        <h6 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Confirmed Appointments
+            <span class="badge bg-white text-success ms-2">{{ confirmed.count }}</span>
+        </h6>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr><th>Student</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                {% for apt in confirmed %}
+                <tr>
+                    <td class="fw-600">{{ apt.customer.get_full_name|default:apt.customer.username }}</td>
+                    <td>{{ apt.appointment_date }}</td>
+                    <td>{{ apt.start_time }}</td>
+                    <td><span class="badge badge-confirmed rounded-pill px-3">Confirmed</span></td>
+                    <td>
+                        <a href="{% url 'appointment_detail' apt.id %}" class="btn btn-sm btn-outline-primary me-1">View</a>
+                        <a href="{% url 'complete_appointment' apt.id %}" class="btn btn-sm btn-outline-secondary"
+                           onclick="return confirm('Mark as completed?')">Complete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-center text-muted py-4">No confirmed appointments.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- All Appointments History -->
+<div class="card">
+    <div class="card-header" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;">
+        <h6 class="mb-0"><i class="fas fa-history me-2"></i>All Appointments History</h6>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr><th>Student</th><th>Date</th><th>Time</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                {% for apt in all_appointments %}
+                <tr>
+                    <td>{{ apt.customer.get_full_name|default:apt.customer.username }}</td>
+                    <td>{{ apt.appointment_date }}</td>
+                    <td>{{ apt.start_time }}</td>
+                    <td>
+                        {% if apt.status == 'pending' %}<span class="badge badge-pending rounded-pill px-3">Pending</span>
+                        {% elif apt.status == 'confirmed' %}<span class="badge badge-confirmed rounded-pill px-3">Confirmed</span>
+                        {% elif apt.status == 'cancelled' %}<span class="badge badge-cancelled rounded-pill px-3">Cancelled</span>
+                        {% else %}<span class="badge badge-completed rounded-pill px-3">{{ apt.status|capfirst }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-4">No appointment history.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

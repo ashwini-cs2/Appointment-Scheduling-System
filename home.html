@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}Home — Appointment Booking{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="p-5 rounded-4 text-white" style="background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#0891b2 100%);">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-3">
+                        <i class="fas fa-calendar-check me-3"></i>Appointment Booking
+                    </h1>
+                    <p class="fs-5 mb-4 opacity-90">
+                        Book appointments with staff, get instant notifications, and manage your schedule — all in one place.
+                    </p>
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg me-3 fw-bold text-primary">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    {% else %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg fw-bold text-primary">
+                        <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-center d-none d-md-block">
+                    <i class="fas fa-calendar-alt" style="font-size:8rem;opacity:0.2;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Role Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-12 text-center mb-2">
+        <h2 class="fw-bold">Who Uses Appointment Booking?</h2>
+        <p class="text-muted">Three roles, one seamless system</p>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center shadow-sm" style="border-top:4px solid #059669;">
+            <div class="card-body py-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                     style="width:64px;height:64px;background:#d1fae5;font-size:1.8rem;">🎓</div>
+                <h5 class="fw-bold">Students</h5>
+                <p class="text-muted small">Register, browse staff, book appointments, and get real-time alerts when staff accept or reject your request.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center shadow-sm" style="border-top:4px solid #0891b2;">
+            <div class="card-body py-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                     style="width:64px;height:64px;background:#e0f2fe;font-size:1.8rem;">👔</div>
+                <h5 class="fw-bold">Staff</h5>
+                <p class="text-muted small">View incoming appointment requests, accept or reject with a reason, and manage your schedule efficiently.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center shadow-sm" style="border-top:4px solid #7c3aed;">
+            <div class="card-body py-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+                     style="width:64px;height:64px;background:#ede9fe;font-size:1.8rem;">🛡️</div>
+                <h5 class="fw-bold">Admins</h5>
+                <p class="text-muted small">Add staff members, oversee all appointments across the system, and manage the full directory.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold">How It Works</h2>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 text-center">
+            <div class="card-body">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 fw-bold text-white"
+                     style="width:52px;height:52px;background:linear-gradient(135deg,#4f46e5,#7c3aed);font-size:1.2rem;">1</div>
+                <h6 class="fw-bold">Student Registers</h6>
+                <small class="text-muted">Students self-register. Staff accounts are created only by admins.</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 text-center">
+            <div class="card-body">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 fw-bold text-white"
+                     style="width:52px;height:52px;background:linear-gradient(135deg,#0891b2,#06b6d4);font-size:1.2rem;">2</div>
+                <h6 class="fw-bold">Books Appointment</h6>
+                <small class="text-muted">Pick a staff member, date and time. Request sent to staff.</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 text-center">
+            <div class="card-body">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 fw-bold text-white"
+                     style="width:52px;height:52px;background:linear-gradient(135deg,#f59e0b,#d97706);font-size:1.2rem;">3</div>
+                <h6 class="fw-bold">Staff Responds</h6>
+                <small class="text-muted">Staff accepts or rejects with a reason. Both get notified instantly.</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 text-center">
+            <div class="card-body">
+                <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 fw-bold text-white"
+                     style="width:52px;height:52px;background:linear-gradient(135deg,#10b981,#059669);font-size:1.2rem;">4</div>
+                <h6 class="fw-bold">Alert Notifications</h6>
+                <small class="text-muted">Real-time in-app alerts keep everyone updated at every step.</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not user.is_authenticated %}
+<div class="text-center py-4 mb-4 rounded-4" style="background:#f8fafc;">
+    <h3 class="fw-bold mb-2">Ready to get started?</h3>
+    <p class="text-muted mb-3">Student? Create your free account now.</p>
+    <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-5">
+        <i class="fas fa-rocket me-2"></i>Sign Up as Student
+    </a>
+</div>
+{% endif %}
+{% endblock %}

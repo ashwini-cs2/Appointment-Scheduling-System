@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Available Time Slots{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Available Time Slots</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Select Date</h5>
+                <input type="date" class="form-control mb-3" id="datePicker" value="{{ selected_date }}">
+                
+                <h5>Select Staff</h5>
+                <select class="form-control" id="staffSelector">
+                    <option value="">All Staff</option>
+                    {% for staff in staff_list %}
+                        <option value="{{ staff.id }}">{{ staff.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Available Slots for {{ selected_date|default:"Today" }}</h5>
+            </div>
+            <div class="card-body">
+                {% if slots %}
+                    <div class="row">
+                        {% for slot in slots %}
+                            <div class="col-md-4 mb-2">
+                                <a href="{% url 'book_appointment' %}?date={{ selected_date }}&time={{ slot.time }}&staff={{ slot.staff_id }}" class="btn btn-outline-primary w-100">
+                                    {{ slot.time }}<br>
+                                    <small>{{ slot.staff_name }}</small>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">No available slots for this date</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h6>Morning</h6>
+                        <small>9:00 AM - 12:00 PM</small>
+                    </div>
+                    <div class="col-4">
+                        <h6>Afternoon</h6>
+                        <small>1:00 PM - 5:00 PM</small>
+                    </div>
+                    <div class="col-4">
+                        <h6>Evening</h6>
+                        <small>6:00 PM - 8:00 PM</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

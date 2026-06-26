@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Book Appointment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="mb-3">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+        <div class="card shadow">
+            <div class="card-header py-3" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;">
+                <h5 class="mb-0"><i class="fas fa-calendar-plus me-2"></i>Book a New Appointment</h5>
+                <small class="opacity-75">Choose a staff member and preferred time slot</small>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info border-0 rounded-3 mb-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    After booking, the staff member will <strong>accept or reject</strong> your request.
+                    You'll receive a notification once they respond.
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-600"><i class="fas fa-user-tie me-1 text-primary"></i>Select Staff Member</label>
+                        {{ form.staff }}
+                        {% if form.staff.errors %}<div class="text-danger small mt-1">{{ form.staff.errors }}</div>{% endif %}
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-600"><i class="fas fa-calendar me-1 text-primary"></i>Date</label>
+                            {{ form.appointment_date }}
+                            {% if form.appointment_date.errors %}<div class="text-danger small mt-1">{{ form.appointment_date.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-600"><i class="fas fa-clock me-1 text-primary"></i>Start Time</label>
+                            {{ form.start_time }}
+                            {% if form.start_time.errors %}<div class="text-danger small mt-1">{{ form.start_time.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-600"><i class="fas fa-clock me-1 text-muted"></i>End Time</label>
+                            {{ form.end_time }}
+                            {% if form.end_time.errors %}<div class="text-danger small mt-1">{{ form.end_time.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-600"><i class="fas fa-sticky-note me-1 text-primary"></i>Notes (optional)</label>
+                        {{ form.notes }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-600">
+                        <i class="fas fa-calendar-check me-2"></i>Submit Booking Request
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

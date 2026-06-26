@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4 align-items-center">
+    <div class="col">
+        <h4 class="fw-bold mb-0"><i class="fas fa-calendar-alt me-2 text-primary"></i>My Appointments</h4>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Book New
+        </a>
+    </div>
+</div>
+
+<!-- Filter Tabs -->
+<ul class="nav nav-pills mb-3" id="aptTabs">
+    <li class="nav-item"><a class="nav-link active" href="#all" data-bs-toggle="pill">All</a></li>
+    <li class="nav-item"><a class="nav-link" href="#pending" data-bs-toggle="pill">Pending</a></li>
+    <li class="nav-item"><a class="nav-link" href="#confirmed" data-bs-toggle="pill">Confirmed</a></li>
+    <li class="nav-item"><a class="nav-link" href="#cancelled" data-bs-toggle="pill">Cancelled</a></li>
+</ul>
+
+<div class="tab-content">
+    <!-- ALL -->
+    <div class="tab-pane fade show active" id="all">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr><th>Staff</th><th>Date</th><th>Time</th><th>Notes</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody>
+                        {% for apt in appointments %}
+                        <tr>
+                            <td class="fw-600">{{ apt.staff.name }}<br><small class="text-muted">{{ apt.staff.specialization }}</small></td>
+                            <td>{{ apt.appointment_date }}</td>
+                            <td>{{ apt.start_time }} – {{ apt.end_time }}</td>
+                            <td><small>{{ apt.notes|truncatechars:40|default:"—" }}</small></td>
+                            <td>
+                                {% if apt.status == 'pending' %}
+                                    <span class="badge badge-pending rounded-pill px-3">Pending</span>
+                                {% elif apt.status == 'confirmed' %}
+                                    <span class="badge badge-confirmed rounded-pill px-3">Confirmed</span>
+                                {% elif apt.status == 'cancelled' %}
+                                    <span class="badge badge-cancelled rounded-pill px-3">Cancelled</span>
+                                {% else %}
+                                    <span class="badge badge-completed rounded-pill px-3">{{ apt.status|capfirst }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'appointment_detail' apt.id %}" class="btn btn-sm btn-outline-primary me-1">View</a>
+                                {% if apt.status == 'pending' or apt.status == 'confirmed' %}
+                                <a href="{% url 'cancel_appointment' apt.id %}" class="btn btn-sm btn-outline-danger">Cancel</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="text-center text-muted py-5">
+                            No appointments yet. <a href="{% url 'book_appointment' %}">Book one!</a>
+                        </td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PENDING -->
+    <div class="tab-pane fade" id="pending">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr><th>Staff</th><th>Date</th><th>Time</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody>
+                        {% for apt in appointments %}
+                        {% if apt.status == 'pending' %}
+                        <tr>
+                            <td class="fw-600">{{ apt.staff.name }}</td>
+                            <td>{{ apt.appointment_date }}</td>
+                            <td>{{ apt.start_time }}</td>
+                            <td>
+                                <a href="{% url 'appointment_detail' apt.id %}" class="btn btn-sm btn-outline-primary me-1">View</a>
+                                <a href="{% url 'cancel_appointment' apt.id %}" class="btn btn-sm btn-outline-danger">Cancel</a>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRMED -->
+    <div class="tab-pane fade" id="confirmed">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr><th>Staff</th><th>Date</th><th>Time</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                        {% for apt in appointments %}
+                        {% if apt.status == 'confirmed' %}
+                        <tr>
+                            <td class="fw-600">{{ apt.staff.name }}</td>
+                            <td>{{ apt.appointment_date }}</td>
+                            <td>{{ apt.start_time }}</td>
+                            <td><a href="{% url 'appointment_detail' apt.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCELLED -->
+    <div class="tab-pane fade" id="cancelled">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr><th>Staff</th><th>Date</th><th>Reason</th></tr>
+                        </thead>
+                        <tbody>
+                        {% for apt in appointments %}
+                        {% if apt.status == 'cancelled' %}
+                        <tr>
+                            <td class="fw-600">{{ apt.staff.name }}</td>
+                            <td>{{ apt.appointment_date }}</td>
+                            <td><small class="text-muted">{{ apt.cancellation_reason|default:"—" }}</small></td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
